@@ -36,7 +36,6 @@ const IndustrySchema = new Schema<IIndustry>({
   collection: 'industries',
 });
 
-IndustrySchema.index({ id: 1 });
 IndustrySchema.index({ name: 1 });
 IndustrySchema.index({ isActive: 1 });
 

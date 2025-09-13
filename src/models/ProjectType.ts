@@ -36,7 +36,6 @@ const ProjectTypeSchema = new Schema<IProjectType>({
   collection: 'project_types',
 });
 
-ProjectTypeSchema.index({ id: 1 });
 ProjectTypeSchema.index({ name: 1 });
 ProjectTypeSchema.index({ isActive: 1 });
 
