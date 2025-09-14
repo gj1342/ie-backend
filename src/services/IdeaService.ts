@@ -1,6 +1,6 @@
 import { Idea, IdeaRequest } from '../models/Idea';
 import { API_VERSION } from '../constants';
-import { MistralService } from './mistralService';
+import { MistralService } from './MistralService';
 import { AppError, ValidationError } from '../utils/ErrorHandler';
 
 export class IdeaService {
