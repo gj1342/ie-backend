@@ -1,5 +1,6 @@
 import { API_VERSION } from '../constants';
 import { ApiSchemas } from '../schemas/api.schemas';
+import { env } from './env';
 
 export const openApiSpec = {
   openapi: '3.0.0',
@@ -20,12 +21,8 @@ export const openApiSpec = {
   },
   servers: [
     {
-      url: 'http://localhost:3000/api/v1',
-      description: 'Development server',
-    },
-    {
-      url: 'https://api.innovativesphere.com/api/v1',
-      description: 'Production server',
+      url: `${env.API_BASE_URL}/api/v1`,
+      description: env.NODE_ENV === 'production' ? 'Production server' : 'Development server',
     },
   ],
   tags: [
