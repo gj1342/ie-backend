@@ -1,37 +1,18 @@
 import { Request, Response } from 'express';
-import { IndustryService } from '../services/IndustryService';
-import { HTTP_STATUS, ERROR_MESSAGES, SUCCESS_MESSAGES } from '../constants';
-import { API_VERSION } from '../constants';
+import { IndustryService, CreateIndustryData, UpdateIndustryData } from '../services/IndustryService';
+import { ResponseHelper } from '../utils/ResponseHelper';
+import { AppError, ValidationError, NotFoundError } from '../utils/ErrorHandler';
 
 export class IndustryController {
-  private industryService: IndustryService;
-
-  constructor() {
-    this.industryService = new IndustryService();
-  }
+  constructor(private industryService: IndustryService) {}
 
   async getAllIndustries(req: Request, res: Response): Promise<void> {
     try {
       const industries = await this.industryService.getAllIndustries();
-      
-      res.status(HTTP_STATUS.OK).json({
-        success: true,
-        message: SUCCESS_MESSAGES.DATA_RETRIEVED,
-        data: industries,
-        meta: {
-          apiVersion: API_VERSION,
-          timestamp: new Date().toISOString(),
-          count: industries.length
-        }
-      });
+      ResponseHelper.success(res, industries);
     } catch (error) {
       console.error('Error fetching industries:', error);
-      
-      res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
-        success: false,
-        error: ERROR_MESSAGES.INTERNAL_SERVER_ERROR,
-        message: error instanceof Error ? error.message : 'Failed to fetch industries'
-      });
+      ResponseHelper.error(res, 'Failed to fetch industries');
     }
   }
 
@@ -39,42 +20,21 @@ export class IndustryController {
     try {
       const { id } = req.params;
       if (!id) {
-        res.status(HTTP_STATUS.BAD_REQUEST).json({
-          success: false,
-          error: ERROR_MESSAGES.BAD_REQUEST,
-          message: 'Industry ID is required'
-        });
+        ResponseHelper.badRequest(res, 'Industry ID is required');
         return;
       }
       
       const industry = await this.industryService.getIndustryById(id);
       
       if (!industry) {
-        res.status(HTTP_STATUS.NOT_FOUND).json({
-          success: false,
-          error: ERROR_MESSAGES.NOT_FOUND,
-          message: 'Industry not found'
-        });
+        ResponseHelper.notFound(res, 'Industry');
         return;
       }
       
-      res.status(HTTP_STATUS.OK).json({
-        success: true,
-        message: SUCCESS_MESSAGES.DATA_RETRIEVED,
-        data: industry,
-        meta: {
-          apiVersion: API_VERSION,
-          timestamp: new Date().toISOString()
-        }
-      });
+      ResponseHelper.success(res, industry);
     } catch (error) {
       console.error('Error fetching industry by ID:', error);
-      
-      res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
-        success: false,
-        error: ERROR_MESSAGES.INTERNAL_SERVER_ERROR,
-        message: error instanceof Error ? error.message : 'Failed to fetch industry'
-      });
+      ResponseHelper.error(res, 'Failed to fetch industry');
     }
   }
 
@@ -83,35 +43,108 @@ export class IndustryController {
       const { q } = req.query;
       
       if (!q || typeof q !== 'string') {
-        res.status(HTTP_STATUS.BAD_REQUEST).json({
-          success: false,
-          error: ERROR_MESSAGES.BAD_REQUEST,
-          message: 'Search query is required'
-        });
+        ResponseHelper.badRequest(res, 'Search query is required');
         return;
       }
       
       const industries = await this.industryService.searchIndustries(q);
-      
-      res.status(HTTP_STATUS.OK).json({
-        success: true,
-        message: SUCCESS_MESSAGES.DATA_RETRIEVED,
-        data: industries,
-        meta: {
-          apiVersion: API_VERSION,
-          timestamp: new Date().toISOString(),
-          count: industries.length,
-          query: q
-        }
-      });
+      ResponseHelper.success(res, industries);
     } catch (error) {
       console.error('Error searching industries:', error);
+      ResponseHelper.error(res, 'Failed to search industries');
+    }
+  }
+
+  async createIndustry(req: Request, res: Response): Promise<void> {
+    try {
+      const data: CreateIndustryData = req.body;
       
-      res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
-        success: false,
-        error: ERROR_MESSAGES.INTERNAL_SERVER_ERROR,
-        message: error instanceof Error ? error.message : 'Failed to search industries'
-      });
+      if (!data.name) {
+        ResponseHelper.badRequest(res, 'Name is required');
+        return;
+      }
+
+      const industry = await this.industryService.createIndustry(data);
+      ResponseHelper.success(res, industry, 'Industry created successfully', 201);
+    } catch (error) {
+      console.error('Error creating industry:', error);
+      
+      if (error instanceof ValidationError) {
+        ResponseHelper.badRequest(res, error.message);
+        return;
+      }
+      
+      ResponseHelper.error(res, 'Failed to create industry');
+    }
+  }
+
+  async updateIndustry(req: Request, res: Response): Promise<void> {
+    try {
+      const { id } = req.params;
+      const data: UpdateIndustryData = req.body;
+      
+      if (!id) {
+        ResponseHelper.badRequest(res, 'Industry ID is required');
+        return;
+      }
+
+      const industry = await this.industryService.updateIndustry(id, data);
+      ResponseHelper.success(res, industry, 'Industry updated successfully');
+    } catch (error) {
+      console.error('Error updating industry:', error);
+      
+      if (error instanceof NotFoundError) {
+        ResponseHelper.notFound(res, 'Industry');
+        return;
+      }
+      
+      ResponseHelper.error(res, 'Failed to update industry');
+    }
+  }
+
+  async deleteIndustry(req: Request, res: Response): Promise<void> {
+    try {
+      const { id } = req.params;
+      
+      if (!id) {
+        ResponseHelper.badRequest(res, 'Industry ID is required');
+        return;
+      }
+
+      await this.industryService.deleteIndustry(id);
+      ResponseHelper.success(res, null, 'Industry deleted successfully');
+    } catch (error) {
+      console.error('Error deleting industry:', error);
+      
+      if (error instanceof NotFoundError) {
+        ResponseHelper.notFound(res, 'Industry');
+        return;
+      }
+      
+      ResponseHelper.error(res, 'Failed to delete industry');
+    }
+  }
+
+  async softDeleteIndustry(req: Request, res: Response): Promise<void> {
+    try {
+      const { id } = req.params;
+      
+      if (!id) {
+        ResponseHelper.badRequest(res, 'Industry ID is required');
+        return;
+      }
+
+      const industry = await this.industryService.softDeleteIndustry(id);
+      ResponseHelper.success(res, industry, 'Industry deactivated successfully');
+    } catch (error) {
+      console.error('Error soft deleting industry:', error);
+      
+      if (error instanceof NotFoundError) {
+        ResponseHelper.notFound(res, 'Industry');
+        return;
+      }
+      
+      ResponseHelper.error(res, 'Failed to deactivate industry');
     }
   }
 }

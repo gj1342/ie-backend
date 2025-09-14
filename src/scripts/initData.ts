@@ -1,6 +1,6 @@
 import { connectDatabase, disconnectDatabase } from '../config/database';
-import { Industry, IndustryEnum } from '../models/Industry';
-import { ProjectType, ProjectTypeEnum } from '../models/ProjectType';
+import { Industry } from '../models/Industry';
+import { ProjectType } from '../models/ProjectType';
 
 const initializeData = async () => {
   try {
@@ -9,49 +9,49 @@ const initializeData = async () => {
 
     const industries = [
       {
-        id: IndustryEnum.HEALTHCARE,
+        id: 'healthcare',
         name: 'Healthcare',
         description: 'Medical, pharmaceutical, and health-related projects',
         isActive: true,
       },
       {
-        id: IndustryEnum.EDUCATION,
+        id: 'education',
         name: 'Education',
         description: 'Educational technology and learning platforms',
         isActive: true,
       },
       {
-        id: IndustryEnum.FINANCE,
+        id: 'finance',
         name: 'Finance',
         description: 'Banking, fintech, and financial services',
         isActive: true,
       },
       {
-        id: IndustryEnum.TECHNOLOGY,
+        id: 'technology',
         name: 'Technology',
         description: 'Software development and IT solutions',
         isActive: true,
       },
       {
-        id: IndustryEnum.ECOMMERCE,
+        id: 'ecommerce',
         name: 'E-commerce',
         description: 'Online retail and marketplace platforms',
         isActive: true,
       },
       {
-        id: IndustryEnum.MANUFACTURING,
+        id: 'manufacturing',
         name: 'Manufacturing',
         description: 'Industrial and production management systems',
         isActive: true,
       },
       {
-        id: IndustryEnum.ENTERTAINMENT,
+        id: 'entertainment',
         name: 'Entertainment',
         description: 'Media, gaming, and entertainment platforms',
         isActive: true,
       },
       {
-        id: IndustryEnum.TRANSPORTATION,
+        id: 'transportation',
         name: 'Transportation',
         description: 'Logistics, mobility, and transportation solutions',
         isActive: true,
@@ -60,49 +60,49 @@ const initializeData = async () => {
 
     const projectTypes = [
       {
-        id: ProjectTypeEnum.WEB_APP,
+        id: 'web-application',
         name: 'Web Application',
         description: 'Browser-based applications and web platforms',
         isActive: true,
       },
       {
-        id: ProjectTypeEnum.MOBILE_APP,
+        id: 'mobile-application',
         name: 'Mobile Application',
         description: 'iOS and Android mobile applications',
         isActive: true,
       },
       {
-        id: ProjectTypeEnum.DESKTOP_SOFTWARE,
+        id: 'desktop-software',
         name: 'Desktop Software',
         description: 'Cross-platform desktop applications',
         isActive: true,
       },
       {
-        id: ProjectTypeEnum.IOT_PROJECT,
+        id: 'iot-project',
         name: 'IoT Project',
         description: 'Internet of Things and connected devices',
         isActive: true,
       },
       {
-        id: ProjectTypeEnum.DATA_SCIENCE,
+        id: 'data-science',
         name: 'Data Science',
         description: 'Data analysis and visualization projects',
         isActive: true,
       },
       {
-        id: ProjectTypeEnum.MACHINE_LEARNING,
+        id: 'machine-learning',
         name: 'Machine Learning',
         description: 'AI and machine learning applications',
         isActive: true,
       },
       {
-        id: ProjectTypeEnum.GAME_DEVELOPMENT,
+        id: 'game-development',
         name: 'Game Development',
         description: 'Video games and interactive entertainment',
         isActive: true,
       },
       {
-        id: ProjectTypeEnum.BLOCKCHAIN,
+        id: 'blockchain',
         name: 'Blockchain',
         description: 'Decentralized applications and smart contracts',
         isActive: true,
