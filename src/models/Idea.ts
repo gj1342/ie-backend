@@ -1,12 +1,9 @@
-import { IndustryEnum } from './Industry';
-import { ProjectTypeEnum } from './ProjectType';
-
 export interface Idea {
   id: string;
   title: string;
   description: string;
-  industry: IndustryEnum;
-  projectType: ProjectTypeEnum;
+  industry: string;
+  projectType: string;
   complexity: 'beginner' | 'intermediate' | 'advanced';
   estimatedDuration: string;
   technologies: string[];
@@ -17,8 +14,8 @@ export interface Idea {
 }
 
 export interface IdeaRequest {
-  industry: IndustryEnum;
-  projectType: ProjectTypeEnum;
+  industry: string;
+  projectType: string;
   userInterests: string[];
   complexity?: 'beginner' | 'intermediate' | 'advanced';
 }

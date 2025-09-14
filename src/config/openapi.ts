@@ -197,16 +197,77 @@ export const openApiSpec = {
                   message: 'Industries retrieved successfully',
                   data: [
                     {
-                      id: 'healthcare',
+                      _id: '507f1f77bcf86cd799439011',
                       name: 'Healthcare',
-                      description: 'Medical, pharmaceutical, and health-related projects',
                     },
                     {
-                      id: 'education',
+                      _id: '507f1f77bcf86cd799439012',
                       name: 'Education',
-                      description: 'Educational technology and learning platforms',
                     },
                   ],
+                },
+              },
+            },
+          },
+          '500': {
+            description: 'Internal server error',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/Error',
+                },
+              },
+            },
+          },
+        },
+      },
+      post: {
+        tags: ['Industries'],
+        summary: 'Create new industry',
+        description: 'Create a new industry',
+        operationId: 'createIndustry',
+        security: [],
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              schema: {
+                $ref: '#/components/schemas/CreateIndustryRequest',
+              },
+              example: {
+                name: 'Agriculture',
+              },
+            },
+          },
+        },
+        responses: {
+          '201': {
+            description: 'Industry created successfully',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/Success',
+                },
+                example: {
+                  success: true,
+                  message: 'Industry created successfully',
+                  data: {
+                    _id: '507f1f77bcf86cd799439015',
+                    name: 'Agriculture',
+                    isActive: true,
+                    createdAt: '2024-01-15T10:30:00.000Z',
+                    updatedAt: '2024-01-15T10:30:00.000Z',
+                  },
+                },
+              },
+            },
+          },
+          '400': {
+            description: 'Bad request - validation error',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/Error',
                 },
               },
             },
@@ -356,6 +417,208 @@ export const openApiSpec = {
           },
         },
       },
+      put: {
+        tags: ['Industries'],
+        summary: 'Update industry',
+        description: 'Update an existing industry',
+        operationId: 'updateIndustry',
+        security: [],
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            required: true,
+            schema: {
+              type: 'string',
+            },
+            description: 'Industry identifier',
+            example: '507f1f77bcf86cd799439011',
+          },
+        ],
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              schema: {
+                $ref: '#/components/schemas/UpdateIndustryRequest',
+              },
+              example: {
+                name: 'Updated Healthcare',
+                isActive: true,
+              },
+            },
+          },
+        },
+        responses: {
+          '200': {
+            description: 'Industry updated successfully',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/Success',
+                },
+                example: {
+                  success: true,
+                  message: 'Industry updated successfully',
+                  data: {
+                    _id: '507f1f77bcf86cd799439011',
+                    name: 'Updated Healthcare',
+                    isActive: true,
+                    createdAt: '2024-01-15T10:30:00.000Z',
+                    updatedAt: '2024-01-15T11:00:00.000Z',
+                  },
+                },
+              },
+            },
+          },
+          '404': {
+            description: 'Industry not found',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/Error',
+                },
+              },
+            },
+          },
+          '400': {
+            description: 'Bad request - validation error',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/Error',
+                },
+              },
+            },
+          },
+          '500': {
+            description: 'Internal server error',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/Error',
+                },
+              },
+            },
+          },
+        },
+      },
+      delete: {
+        tags: ['Industries'],
+        summary: 'Delete industry',
+        description: 'Permanently delete an industry by ID',
+        operationId: 'deleteIndustry',
+        security: [],
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            required: true,
+            schema: {
+              type: 'string',
+            },
+            description: 'Industry identifier',
+            example: 'healthcare',
+          },
+        ],
+        responses: {
+          '200': {
+            description: 'Industry deleted successfully',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    success: { type: 'boolean', example: true },
+                    message: { type: 'string', example: 'Industry deleted successfully' },
+                    data: { type: 'null', example: null },
+                  },
+                },
+              },
+            },
+          },
+          '404': {
+            description: 'Industry not found',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/Error',
+                },
+              },
+            },
+          },
+          '500': {
+            description: 'Internal server error',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/Error',
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    '/industries/{id}/deactivate': {
+      patch: {
+        tags: ['Industries'],
+        summary: 'Deactivate industry',
+        description: 'Soft delete an industry by setting isActive to false',
+        operationId: 'softDeleteIndustry',
+        security: [],
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            required: true,
+            schema: {
+              type: 'string',
+            },
+            description: 'Industry identifier',
+            example: 'healthcare',
+          },
+        ],
+        responses: {
+          '200': {
+            description: 'Industry deactivated successfully',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    success: { type: 'boolean', example: true },
+                    message: { type: 'string', example: 'Industry deactivated successfully' },
+                    data: {
+                      $ref: '#/components/schemas/IndustryInfo',
+                    },
+                  },
+                },
+              },
+            },
+          },
+          '404': {
+            description: 'Industry not found',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/Error',
+                },
+              },
+            },
+          },
+          '500': {
+            description: 'Internal server error',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/Error',
+                },
+              },
+            },
+          },
+        },
+      },
     },
     '/project-types': {
       get: {
@@ -387,16 +650,77 @@ export const openApiSpec = {
                   message: 'Project types retrieved successfully',
                   data: [
                     {
-                      id: 'web-application',
+                      _id: '507f1f77bcf86cd799439013',
                       name: 'Web Application',
-                      description: 'Browser-based applications and web platforms',
                     },
                     {
-                      id: 'mobile-application',
+                      _id: '507f1f77bcf86cd799439014',
                       name: 'Mobile Application',
-                      description: 'iOS and Android mobile applications',
                     },
                   ],
+                },
+              },
+            },
+          },
+          '500': {
+            description: 'Internal server error',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/Error',
+                },
+              },
+            },
+          },
+        },
+      },
+      post: {
+        tags: ['Project Types'],
+        summary: 'Create new project type',
+        description: 'Create a new project type',
+        operationId: 'createProjectType',
+        security: [],
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              schema: {
+                $ref: '#/components/schemas/CreateProjectTypeRequest',
+              },
+              example: {
+                name: 'Mobile Application',
+              },
+            },
+          },
+        },
+        responses: {
+          '201': {
+            description: 'Project type created successfully',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/Success',
+                },
+                example: {
+                  success: true,
+                  message: 'Project type created successfully',
+                  data: {
+                    _id: '507f1f77bcf86cd799439015',
+                    name: 'Mobile Application',
+                    isActive: true,
+                    createdAt: '2024-01-15T10:30:00.000Z',
+                    updatedAt: '2024-01-15T10:30:00.000Z',
+                  },
+                },
+              },
+            },
+          },
+          '400': {
+            description: 'Bad request - validation error',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/Error',
                 },
               },
             },
@@ -493,7 +817,7 @@ export const openApiSpec = {
               type: 'string',
             },
             description: 'Project type identifier',
-            example: 'web-application',
+            example: '507f1f77bcf86cd799439013',
           },
         ],
         responses: {
@@ -509,6 +833,232 @@ export const openApiSpec = {
                     data: {
                       $ref: '#/components/schemas/ProjectTypeInfo',
                     },
+                  },
+                },
+              },
+            },
+          },
+          '400': {
+            description: 'Bad request - invalid ID',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/Error',
+                },
+              },
+            },
+          },
+          '404': {
+            description: 'Project type not found',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/Error',
+                },
+              },
+            },
+          },
+          '500': {
+            description: 'Internal server error',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/Error',
+                },
+              },
+            },
+          },
+        },
+      },
+      put: {
+        tags: ['Project Types'],
+        summary: 'Update project type',
+        description: 'Update an existing project type',
+        operationId: 'updateProjectType',
+        security: [],
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            required: true,
+            schema: {
+              type: 'string',
+            },
+            description: 'Project type identifier',
+            example: '507f1f77bcf86cd799439013',
+          },
+        ],
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              schema: {
+                $ref: '#/components/schemas/UpdateProjectTypeRequest',
+              },
+              example: {
+                name: 'Updated Mobile Application',
+                isActive: true,
+              },
+            },
+          },
+        },
+        responses: {
+          '200': {
+            description: 'Project type updated successfully',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/Success',
+                },
+                example: {
+                  success: true,
+                  message: 'Project type updated successfully',
+                  data: {
+                    _id: '507f1f77bcf86cd799439013',
+                    name: 'Updated Mobile Application',
+                    isActive: true,
+                    createdAt: '2024-01-15T10:30:00.000Z',
+                    updatedAt: '2024-01-15T11:00:00.000Z',
+                  },
+                },
+              },
+            },
+          },
+          '400': {
+            description: 'Bad request - validation error',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/Error',
+                },
+              },
+            },
+          },
+          '404': {
+            description: 'Project type not found',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/Error',
+                },
+              },
+            },
+          },
+          '500': {
+            description: 'Internal server error',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/Error',
+                },
+              },
+            },
+          },
+        },
+      },
+      delete: {
+        tags: ['Project Types'],
+        summary: 'Delete project type',
+        description: 'Permanently delete a project type',
+        operationId: 'deleteProjectType',
+        security: [],
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            required: true,
+            schema: {
+              type: 'string',
+            },
+            description: 'Project type identifier',
+            example: '507f1f77bcf86cd799439013',
+          },
+        ],
+        responses: {
+          '200': {
+            description: 'Project type deleted successfully',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/Success',
+                },
+                example: {
+                  success: true,
+                  message: 'Project type deleted successfully',
+                  data: null,
+                },
+              },
+            },
+          },
+          '400': {
+            description: 'Bad request - invalid ID',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/Error',
+                },
+              },
+            },
+          },
+          '404': {
+            description: 'Project type not found',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/Error',
+                },
+              },
+            },
+          },
+          '500': {
+            description: 'Internal server error',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/Error',
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    '/project-types/{id}/deactivate': {
+      patch: {
+        tags: ['Project Types'],
+        summary: 'Deactivate project type',
+        description: 'Soft delete (deactivate) a project type',
+        operationId: 'softDeleteProjectType',
+        security: [],
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            required: true,
+            schema: {
+              type: 'string',
+            },
+            description: 'Project type identifier',
+            example: '507f1f77bcf86cd799439013',
+          },
+        ],
+        responses: {
+          '200': {
+            description: 'Project type deactivated successfully',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/Success',
+                },
+                example: {
+                  success: true,
+                  message: 'Project type deactivated successfully',
+                  data: {
+                    _id: '507f1f77bcf86cd799439013',
+                    name: 'Mobile Application',
+                    isActive: false,
+                    createdAt: '2024-01-15T10:30:00.000Z',
+                    updatedAt: '2024-01-15T11:00:00.000Z',
                   },
                 },
               },

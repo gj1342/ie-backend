@@ -1,3 +1,3 @@
-export { Industry, IndustryEnum, type IIndustry, type IndustryType } from './Industry';
-export { ProjectType, ProjectTypeEnum, type IProjectType, type ProjectTypeType } from './ProjectType';
+export { Industry, type IIndustry } from './Industry';
+export { ProjectType, type IProjectType } from './ProjectType';
 export { type Idea, type IdeaRequest, type IdeaResponse } from './Idea';

@@ -248,4 +248,70 @@ export const ApiSchemas = {
     },
     required: ['success', 'message', 'data', 'meta'],
   },
+
+  CreateIndustryRequest: {
+    type: 'object',
+    properties: {
+      name: {
+        type: 'string',
+        minLength: 2,
+        maxLength: 100,
+        example: 'Agriculture',
+        description: 'Industry name',
+      },
+    },
+    required: ['name'],
+  },
+
+  UpdateIndustryRequest: {
+    type: 'object',
+    properties: {
+      name: {
+        type: 'string',
+        minLength: 2,
+        maxLength: 100,
+        example: 'Updated Agriculture',
+        description: 'Industry name',
+      },
+      isActive: {
+        type: 'boolean',
+        example: true,
+        description: 'Whether the industry is active',
+      },
+    },
+    minProperties: 1,
+  },
+
+  CreateProjectTypeRequest: {
+    type: 'object',
+    properties: {
+      name: {
+        type: 'string',
+        minLength: 2,
+        maxLength: 100,
+        example: 'Mobile Application',
+        description: 'Project type name',
+      },
+    },
+    required: ['name'],
+  },
+
+  UpdateProjectTypeRequest: {
+    type: 'object',
+    properties: {
+      name: {
+        type: 'string',
+        minLength: 2,
+        maxLength: 100,
+        example: 'Updated Mobile Application',
+        description: 'Project type name',
+      },
+      isActive: {
+        type: 'boolean',
+        example: true,
+        description: 'Whether the project type is active',
+      },
+    },
+    minProperties: 1,
+  },
 };
