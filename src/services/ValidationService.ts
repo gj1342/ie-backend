@@ -2,23 +2,29 @@ import { Industry } from '../models/Industry';
 import { ProjectType } from '../models/ProjectType';
 
 export class ValidationService {
-  static async validateIndustry(industryId: string): Promise<boolean> {
-    const industry = await Industry.findOne({ id: industryId, isActive: true });
+  static async validateIndustry(industryName: string): Promise<boolean> {
+    const industry = await Industry.findOne({ 
+      name: { $regex: new RegExp(`^${industryName}$`, 'i') }, 
+      isActive: true 
+    });
     return !!industry;
   }
 
-  static async validateProjectType(projectTypeId: string): Promise<boolean> {
-    const projectType = await ProjectType.findOne({ id: projectTypeId, isActive: true });
+  static async validateProjectType(projectTypeName: string): Promise<boolean> {
+    const projectType = await ProjectType.findOne({ 
+      name: { $regex: new RegExp(`^${projectTypeName}$`, 'i') }, 
+      isActive: true 
+    });
     return !!projectType;
   }
 
   static async getValidIndustries(): Promise<string[]> {
-    const industries = await Industry.find({ isActive: true }).select('id');
-    return industries.map(industry => industry.id);
+    const industries = await Industry.find({ isActive: true }).select('name');
+    return industries.map(industry => industry.name);
   }
 
   static async getValidProjectTypes(): Promise<string[]> {
-    const projectTypes = await ProjectType.find({ isActive: true }).select('id');
-    return projectTypes.map(projectType => projectType.id);
+    const projectTypes = await ProjectType.find({ isActive: true }).select('name');
+    return projectTypes.map(projectType => projectType.name);
   }
 }
