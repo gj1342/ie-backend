@@ -59,7 +59,8 @@ export class MistralService {
   }
 
   async generateIdea(industry: string, projectType: string, userInterests: string[], complexity: string = 'intermediate'): Promise<string> {
-    const prompt = this.buildPrompt(industry, projectType, userInterests, complexity);
+    const randomnessSeed = Math.random().toString(36).slice(2, 10);
+    const prompt = this.buildPrompt(industry, projectType, userInterests, complexity, randomnessSeed);
     
     const messages: MistralMessage[] = [
       {
@@ -77,7 +78,8 @@ export class MistralService {
         const response: AxiosResponse<MistralResponse> = await this.client.post('/chat/completions', {
           model: 'mistral-small-latest',
           messages,
-          temperature: 0.8,
+          temperature: 0.95,
+          top_p: 0.95,
           max_tokens: 2000,
         });
 
@@ -106,7 +108,7 @@ export class MistralService {
     throw new AppError('Unexpected error in idea generation', 500);
   }
 
-  private buildPrompt(industry: string, projectType: string, userInterests: string[], complexity: string): string {
+  private buildPrompt(industry: string, projectType: string, userInterests: string[], complexity: string, randomnessSeed: string): string {
     return `Generate a detailed capstone project idea with the following specifications:
 
     Industry: ${industry}
@@ -125,7 +127,10 @@ export class MistralService {
     "estimatedDuration": "Duration estimate (e.g., '3-6 months')"
     }
 
-    Make the idea innovative, practical, and aligned with the specified industry and project type. Ensure it's appropriate for the complexity level and incorporates the user's interests.`;
+    Make the idea innovative, practical, and aligned with the specified industry and project type. Ensure it's appropriate for the complexity level and incorporates the user's interests.
+
+    Randomization seed: ${randomnessSeed}
+    Notes: With the same inputs, you should provide a different creative angle each time.`;
   }
 
   private delay(ms: number): Promise<void> {
