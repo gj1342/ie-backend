@@ -79,7 +79,7 @@ export class IdeaService {
       return {
         title: parsed.title.substring(0, 100),
         description: parsed.description,
-        estimatedDuration: parsed.estimatedDuration || '3-6 months',
+        estimatedDuration: parsed.estimatedDuration || '',
         technologies: Array.isArray(parsed.technologies) ? parsed.technologies.slice(0, 10) : [],
         features: Array.isArray(parsed.features) ? parsed.features.slice(0, 15) : [],
         objectives: Array.isArray(parsed.objectives) ? parsed.objectives.slice(0, 10) : [],
