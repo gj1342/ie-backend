@@ -58,9 +58,10 @@ export class MistralService {
     );
   }
 
-  async generateIdea(industry: string, projectType: string, userInterests: string[], complexity: string = 'intermediate'): Promise<string> {
+  async generateIdea(industry: string, projectType: string, userInterests: string[] | undefined, complexity: string = 'intermediate'): Promise<string> {
     const randomnessSeed = Math.random().toString(36).slice(2, 10);
-    const prompt = this.buildPrompt(industry, projectType, userInterests, complexity, randomnessSeed);
+    const safeInterests = Array.isArray(userInterests) ? userInterests : [];
+    const prompt = this.buildPrompt(industry, projectType, safeInterests, complexity, randomnessSeed);
     
     const messages: MistralMessage[] = [
       {
@@ -108,12 +109,13 @@ export class MistralService {
     throw new AppError('Unexpected error in idea generation', 500);
   }
 
-  private buildPrompt(industry: string, projectType: string, userInterests: string[], complexity: string, randomnessSeed: string): string {
+  private buildPrompt(industry: string, projectType: string, userInterests: string[] | undefined, complexity: string, randomnessSeed: string): string {
+    const interestsText = userInterests && userInterests.length > 0 ? userInterests.join(', ') : 'N/A';
     return `Generate a detailed capstone project idea with the following specifications:
 
     Industry: ${industry}
     Project Type: ${projectType}
-    User Interests: ${userInterests.join(', ')}
+    User Interests: ${interestsText}
     Complexity Level: ${complexity}
 
     Please respond with a JSON object containing exactly these fields:
