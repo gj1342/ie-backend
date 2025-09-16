@@ -37,7 +37,7 @@ app.use(helmet({
 
 app.use(cors({
   origin: env.NODE_ENV === 'production' 
-    ? env.ALLOWED_ORIGINS?.split(',') 
+    ? (env.ALLOWED_ORIGINS === '*' ? '*' : env.ALLOWED_ORIGINS?.split(','))
     : true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'Accept-Version', 'X-API-Key'],
