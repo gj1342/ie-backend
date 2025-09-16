@@ -13,9 +13,7 @@ export const validateIdeaRequest = async (req: Request, res: Response, next: Nex
       'any.required': 'Project type is required',
       'string.empty': 'Project type cannot be empty'
     }),
-    userInterests: Joi.array().items(Joi.string()).min(1).required().messages({
-      'any.required': 'User interests are required',
-      'array.min': 'At least one user interest is required',
+    userInterests: Joi.array().items(Joi.string()).optional().messages({
       'array.base': 'User interests must be an array'
     }),
     complexity: Joi.string().valid('beginner', 'intermediate', 'advanced').optional().messages({

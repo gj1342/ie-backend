@@ -56,10 +56,7 @@ export class IdeaService {
     if (!request.projectType) {
       throw new ValidationError('Project type is required');
     }
-    if (!request.userInterests || request.userInterests.length === 0) {
-      throw new ValidationError('User interests are required');
-    }
-    if (request.userInterests.length > 10) {
+    if (request.userInterests && request.userInterests.length > 10) {
       throw new ValidationError('Maximum 10 interests allowed');
     }
   }

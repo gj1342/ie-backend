@@ -21,10 +21,7 @@ export class IdeaController {
         return;
       }
       
-      if (!request.userInterests || request.userInterests.length === 0) {
-        ResponseHelper.badRequest(res, 'User interests are required');
-        return;
-      }
+      // userInterests is optional
 
       const idea = await this.ideaService.generateIdea(request);
       ResponseHelper.success(res, { idea, generatedAt: new Date().toISOString() }, 'Idea generated successfully');
