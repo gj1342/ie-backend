@@ -39,7 +39,6 @@ app.use(cors({
   origin: env.NODE_ENV === 'production' 
     ? env.ALLOWED_ORIGINS?.split(',') 
     : true,
-  credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'Accept-Version', 'X-API-Key'],
 }));
